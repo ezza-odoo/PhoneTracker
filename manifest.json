@@ -1,0 +1,36 @@
+{
+    "manifest_version": 3,
+    "name": "Odoo EL responses",
+    "version": "1.1",
+    "description": "Log Phone responses",
+    "permissions": [
+      "activeTab",
+      "scripting",
+      "tabs",
+      "windows",
+      "storage"
+    ],
+    "host_permissions": [
+      "*://*.odoo.com/*"
+    ],
+    "action": {
+      "default_title": "Open phone Form"
+    },
+    "background": {
+      "service_worker": "background.js"
+    },
+    "content_scripts": [
+    {
+        "matches": ["*://*.odoo.com/*"],
+        "js": ["content.js"],
+        "run_at": "document_idle"
+    }
+    ],
+    "icons": {
+      "16": "icon.png",
+      "32": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    }
+  }
+  

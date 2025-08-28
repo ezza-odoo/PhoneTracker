@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>New Call</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+
+<body>
+  <form id="ticketForm">
+    <label for="title">Caller Name:</label>
+    <input type="text" id="title" name="title" placeholder="Ahmad" required />
+
+    <label for="phone">Phone:</label>
+    <input type="text" id="phone" name="phone" placeholder="+971 123 4567" required />
+
+    <label for="tracking">Tracking(Sub/Email/DB):</label>
+    <input type="text" id="tracking" name="tracking" placeholder="M1234567891" required />
+
+    <fieldset>
+      <legend>Ticket Type:</legend>
+      <label>
+        <input type="radio" id="stage-func" name="stage" value="91176" required />
+        Functional
+      </label>
+      <label>
+        <input type="radio" id="stage-admin" name="stage" value="91182" required />
+        Administration
+      </label>
+    </fieldset>
+
+    <label for="descriptionInput">Details:</label>
+    <textarea id="descriptionInput" name="description" placeholder="In Brief - What is the Purpose of this Call?"></textarea>
+    <button type="submit" id="submitDescription">Submit</button>
+  </form>
+
+  <span class="success-text hide" id="successMsg">Success!!</span>
+  <span class="failed-text hide" id="errorMsg">ERROR</span>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>
