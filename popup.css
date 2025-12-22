@@ -124,3 +124,19 @@ span {
   width: 100%;
   margin: 0 auto;
 }
+
+.field-error {
+  color: #ff5c5c;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+}
+
+.hide {
+  display: none;
+}
+
+input.error {
+  border: 1px solid #ff5c5c;
+  background-color: rgba(255, 92, 92, 0.08);
+}
