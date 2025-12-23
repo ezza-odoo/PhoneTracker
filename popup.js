@@ -17,18 +17,18 @@ document
       return /^00\d{5,}$/.test(value.replace(/\s+/g, ""));
     }
 
-    if (!isValidPhone(phone)) {
-      // Show inline error
-      if (phoneError) {
-        phoneError.textContent =
-          "Phone number must start with 00 and contain at least 5 digits (e.g. 00971501234567).";
-        phoneError.classList.remove("hide");
-      }
-      showStatus("Invalid phone number.", "error");
-      return;
-    } else if (phoneError) {
-      phoneError.classList.add("hide"); // hide previous error
-    }
+    // if (!isValidPhone(phone)) {
+    //   // Show inline error
+    //   if (phoneError) {
+    //     phoneError.textContent =
+    //       "Phone number must start with 00 and contain at least 5 digits (e.g. 00971501234567).";
+    //     phoneError.classList.remove("hide");
+    //   }
+    //   showStatus("Invalid phone number.", "error");
+    //   return;
+    // } else if (phoneError) {
+    //   phoneError.classList.add("hide"); // hide previous error
+    // }
 
     try {
       // Get all open tabs in all windows
