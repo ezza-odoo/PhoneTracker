@@ -1,4 +1,6 @@
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+const api = typeof browser !== "undefined" ? browser : chrome;
+
+api.runtime.onMessage.addListener((request, sender, sendResponse) => {
   (async () => {
     try {
       const payloadData = request.payload;
@@ -14,8 +16,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }
 
         // 2️⃣ Fallback: global variables
-        if (window.__OdooSession?.csrf_token) return window.__OdooSession.csrf_token;
-        if (window.odoo?.__session_info__?.csrf_token) return window.odoo.__session_info__.csrf_token;
+        if (window.__OdooSession?.csrf_token)
+          return window.__OdooSession.csrf_token;
+        if (window.odoo?.__session_info__?.csrf_token)
+          return window.odoo.__session_info__.csrf_token;
 
         // 3️⃣ Not found
         return null;
@@ -34,31 +38,36 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         params: {
           model: "project.task",
           method: "create",
-          args: [{
-            name: payloadData.title,
-            description: payloadData.description,
-            project_id: 23901, // replace with your project ID
-            stage_id: parseInt(payloadData.ticketType || 1),
-            reviewer_id: null
-          }],
-          kwargs: {}
+          args: [
+            {
+              name: payloadData.title,
+              description: payloadData.description,
+              project_id: 23901,
+              stage_id: parseInt(payloadData.ticketType || 1),
+              reviewer_id: null,
+            },
+          ],
+          kwargs: {},
         },
-        id: Date.now()
+        id: Date.now(),
       };
 
       const response = await fetch("/web/dataset/call_kw", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-CSRF-Token": csrfToken
+          "X-CSRF-Token": csrfToken,
         },
         credentials: "include",
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
 
       const result = await response.json();
       if (result.error) {
-        sendResponse({ success: false, error: result.error.data?.message || "Unknown error" });
+        sendResponse({
+          success: false,
+          error: result.error.data?.message || "Unknown error",
+        });
       } else {
         const taskId = result.result;
         const url = `https://www.odoo.com/odoo/project.task/${taskId}`;
@@ -71,5 +80,5 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
   })();
 
-  return true; // keep channel open for async response
+  return true;
 });

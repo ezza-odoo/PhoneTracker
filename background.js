@@ -1,9 +1,9 @@
-chrome.action.onClicked.addListener((tab) => {
+const api = typeof browser !== "undefined" ? browser : chrome;
+api.action.onClicked.addListener((tab) => {
   const lastActiveTabId = tab.id;
-
-  chrome.storage.local.set({ lastActiveTabId }, () => {
-    chrome.windows.create({
-      url: chrome.runtime.getURL("popup.html"),
+  api.storage.local.set({ lastActiveTabId }, () => {
+    api.windows.create({
+      url: api.runtime.getURL("popup.html"),
       type: "popup",
       width: 360,
       height: 650,

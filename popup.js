@@ -1,3 +1,5 @@
+const api = typeof browser !== "undefined" ? browser : chrome;
+
 document
   .getElementById("ticketForm")
   .addEventListener("submit", async (event) => {
@@ -11,6 +13,7 @@ document
     const phone = document.getElementById("phone")?.value.trim();
     const phoneError = document.getElementById("phoneError");
     const tracking = document.getElementById("tracking")?.value.trim();
+
     description = `Phone: ${phone} <br> Tracking: ${tracking} <br> ${description}`;
 
     function isValidPhone(value) {
@@ -18,46 +21,33 @@ document
     }
 
     if (!isValidPhone(phone)) {
-      // Show inline error
-      if (phoneError) {
-        phoneError.textContent =
-          "Phone number must start with '+' and country code (e.g. +971501234567).";
-        phoneError.classList.remove("hide");
-      }
+      phoneError.textContent =
+        "Phone number must start with '+' and country code (e.g. +971501234567).";
+      phoneError.classList.remove("hide");
       showStatus("Invalid phone number.", "error");
       return;
-    } else if (phoneError) {
-      phoneError.classList.add("hide"); // hide previous error
+    } else {
+      phoneError.classList.add("hide");
     }
 
     try {
-      // Get all open tabs in all windows
-      const tabs = await chrome.tabs.query({});
-      const odooTab = tabs.find(
-        (tab) => tab.url && tab.url.includes("odoo.com/odoo")
-      );
+      const tabs = await api.tabs.query({});
+      const odooTab = tabs.find((tab) => tab.url?.includes("odoo.com/odoo"));
 
       if (!odooTab) {
-        showStatus(
-          "⚠️ No Odoo tab open. Please open Odoo and try again.",
-          "error"
-        );
+        showStatus("⚠️ No Odoo tab open.", "error");
         return;
       }
 
-      // Send ticket data to content.js
-      chrome.tabs.sendMessage(
+      api.tabs.sendMessage(
         odooTab.id,
         {
           action: "createTicket",
           payload: { title, description, ticketType },
         },
         (response) => {
-          if (chrome.runtime.lastError) {
-            showStatus(
-              "❌ Could not reach Odoo tab. Make sure it is loaded.",
-              "error"
-            );
+          if (api.runtime.lastError) {
+            showStatus("❌ Could not reach Odoo tab.", "error");
             return;
           }
           if (response?.success) {
@@ -80,5 +70,5 @@ function showStatus(msg, type) {
   const statusEl = document.getElementById("status");
   if (!statusEl) return;
   statusEl.textContent = msg;
-  statusEl.className = type; // assumes CSS: .success {color: green}, .error {color: red}
+  statusEl.className = type;
 }
